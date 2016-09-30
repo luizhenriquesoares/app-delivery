@@ -32,7 +32,7 @@ class ClientsController extends Controller
     public function index()
     {
         $clients = $this->repository->paginate(15);
-
+        
         return view('admin.clients.index', compact('clients'));
     }
 

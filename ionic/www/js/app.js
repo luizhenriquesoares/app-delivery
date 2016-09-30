@@ -10,8 +10,8 @@ angular.module('starter.run', []);
 
 angular.module('starter', [
     'ionic', 'starter.controllers', 'starter.services', 'starter.filters', 'starter.run',
-    'angular-oauth2', 'ngResource', 'ngCordova', 'uiGmapgoogle-maps', 'pusher-angular', 
-    'permission','http-auth-interceptor'
+    'angular-oauth2', 'ngResource', 'ngCordova', 'uiGmapgoogle-maps', 'pusher-angular',
+    'permission', 'http-auth-interceptor', 'ionic.service.core', 'ionic.service.push',
 
 ])
 
@@ -40,7 +40,17 @@ angular.module('starter', [
             if (window.StatusBar) {
                 StatusBar.styleDefault();
             }
+
+            Ionic.io();
+            var push = new Ionic.Push({
+                debug: true
+            });
+
+            push.register(function (token) {
+                console.log(token);
+            })
         });
+
     })
 
 .config(function ($stateProvider, $urlRouterProvider, OAuthProvider, OAuthTokenProvider, appConfig, $provide) {

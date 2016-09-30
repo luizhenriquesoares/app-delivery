@@ -1,12 +1,12 @@
 <?php
 
-
 namespace CodeDelivery\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
+
     /**
      * Register the application services.
      *
@@ -14,6 +14,11 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(
+            'CodeDelivery\Repositories\ProductRepository',
+            'CodeDelivery\Repositories\ProductRepositoryEloquent'
+        );
+
         $this->app->bind(
             'CodeDelivery\Repositories\CategoryRepository',
             'CodeDelivery\Repositories\CategoryRepositoryEloquent'
@@ -25,18 +30,8 @@ class RepositoryServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            'CodeDelivery\Repositories\CupomRepository',
-            'CodeDelivery\Repositories\CupomRepositoryEloquent'
-        );
-
-        $this->app->bind(
-            'CodeDelivery\Repositories\OrderItemRepository',
-            'CodeDelivery\Repositories\OrderItemRepositoryEloquent'
-        );
-        
-        $this->app->bind(
-            'CodeDelivery\Repositories\OrderItemRepository',
-            'CodeDelivery\Repositories\OrderItemRepositoryEloquent'
+            'CodeDelivery\Repositories\UserRepository',
+            'CodeDelivery\Repositories\UserRepositoryEloquent'
         );
 
         $this->app->bind(
@@ -45,16 +40,8 @@ class RepositoryServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            'CodeDelivery\Repositories\ProductRepository',
-            'CodeDelivery\Repositories\ProductRepositoryEloquent'
+            'CodeDelivery\Repositories\CupomRepository',
+            'CodeDelivery\Repositories\CupomRepositoryEloquent'
         );
-
-        $this->app->bind(
-            'CodeDelivery\Repositories\UserRepository',
-            'CodeDelivery\Repositories\UserRepositoryEloquent'
-        );
-
     }
-
-
 }

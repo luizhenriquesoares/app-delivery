@@ -14,7 +14,8 @@
         "lucadegasperi/oauth2-server-laravel": "5.1.*",
         "league/fractal": "dev-master",
         "barryvdh/laravel-cors": "^0.8.2",
-        "pusher/pusher-php-server": "~2.0"
+        "pusher/pusher-php-server": "~2.0",
+        "barryvdh/laravel-debugbar": "^2.3"
 
     },
     "require-dev": {

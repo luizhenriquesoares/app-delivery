@@ -12,6 +12,13 @@
 */
 
 
+/**
+ * Route para Admin Auth::user()-> <> $role
+ */
+
+Route::group(['prefix' => 'admin', 'middleware' => 'auth.check:admin', 'as' => 'admin.'], function () {
+
+
 Route::get('/home', function () {
     return view('welcome');
 });
@@ -20,11 +27,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-/**
- * Route para Admin Auth::user()-> <> $role
- */
 
-Route::group(['prefix' => 'admin', 'middleware' => 'auth.check:admin', 'as' => 'admin.'], function () {
     /**
      * Rotas categorias
      */
