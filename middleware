@@ -1,0 +1,29 @@
+
+[37;41m                                  [39;49m
+[37;41m  [InvalidArgumentException]      [39;49m
+[37;41m  Command "make" is not defined.  [39;49m
+[37;41m  Did you mean one of these?      [39;49m
+[37;41m      make:transformer            [39;49m
+[37;41m      make:repository             [39;49m
+[37;41m      make:middleware             [39;49m
+[37;41m      make:controller             [39;49m
+[37;41m      make:migration              [39;49m
+[37;41m      make:validator              [39;49m
+[37;41m      make:presenter              [39;49m
+[37;41m      make:listener               [39;49m
+[37;41m      make:provider               [39;49m
+[37;41m      make:bindings               [39;49m
+[37;41m      make:criteria               [39;49m
+[37;41m      make:resource               [39;49m
+[37;41m      make:request                [39;49m
+[37;41m      make:command                [39;49m
+[37;41m      make:console                [39;49m
+[37;41m      make:seeder                 [39;49m
+[37;41m      make:entity                 [39;49m
+[37;41m      make:policy                 [39;49m
+[37;41m      make:event                  [39;49m
+[37;41m      make:model                  [39;49m
+[37;41m      make:test                   [39;49m
+[37;41m      make:job                    [39;49m
+[37;41m                                  [39;49m
+
