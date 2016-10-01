@@ -11,11 +11,11 @@ angular.module('starter.run', []);
 angular.module('starter', [
     'ionic', 'starter.controllers', 'starter.services', 'starter.filters', 'starter.run',
     'angular-oauth2', 'ngResource', 'ngCordova', 'uiGmapgoogle-maps', 'pusher-angular',
-    'permission', 'http-auth-interceptor', 'ionic.service.core', 'ionic.service.push',
+    'permission', 'http-auth-interceptor', 'ionic.service.core', 'ionic.service.push'
 
 ])
 
-.constant('appConfig', {
+    .constant('appConfig', {
         baseUrl: 'http://192.168.0.17:8000',
         pusherKey: 'ba2c513c58a60acb7de1',
         redirectAfterLogin: {
@@ -23,7 +23,17 @@ angular.module('starter', [
             deliveryman: 'deliveryman.order'
         }
     })
-    .run(function ($ionicPlatform, $window, appConfig) {
+
+
+    .service('PagSeguro', function ($resource, appConfig) {
+        return $resource(appConfig.baseUrl + '/api/client/session', {}, {
+            query: {
+                isArray: false
+            }
+        });
+    })
+
+    .run(function ($ionicPlatform, $window, appConfig, PagSeguro) {
         $window.client = new Pusher(appConfig.pusherKey);
         $ionicPlatform.ready(function () {
 
@@ -51,148 +61,154 @@ angular.module('starter', [
             })
         });
 
+        PagSeguro.query(function (data) {
+            PagSeguroDirectPayment.setSessionId(data.sessionId);
+        }, function (dataError) {
+
+        });
+
     })
 
-.config(function ($stateProvider, $urlRouterProvider, OAuthProvider, OAuthTokenProvider, appConfig, $provide) {
+    .config(function ($stateProvider, $urlRouterProvider, OAuthProvider, OAuthTokenProvider, appConfig, $provide) {
 
-    OAuthProvider.configure({
-        baseUrl: appConfig.baseUrl,
-        clientId: 'app',
-        clientSecret: 'secret',
-        grantPath: '/oauth/access_token' // optional
-    });
-
-    OAuthTokenProvider.configure({
-        name: 'token',
-        options: {
-            secure: false
-        }
-    });
-
-    $stateProvider
-        .state('login', {
-            cache: false,
-            url: '/login',
-            templateUrl: 'templates/login.html',
-            controller: 'LoginCtrl'
-        })
-        .state('logout', {
-            url: '/logout',
-            controller: 'LogoutCtrl'
-        })
-        .state('client', {
-            abstract: true,
-            cache: false,
-            url: '/client',
-            templateUrl: 'templates/client/menu.html',
-            controller: 'ClientMenuCtrl',
-            data: {
-                permissions: {
-                    only: ['client-role']
-                }
-            }
-        })
-        .state('client.checkout', {
-            cache: false,
-            url: '/checkout',
-            templateUrl: 'templates/client/checkout.html',
-            controller: 'ClientCheckoutCtrl'
-        })
-        .state('client.view_order', {
-            url: '/view_order/:id',
-            templateUrl: 'templates/client/view_order.html',
-            controller: 'ClientViewOrderCtrl'
-        })
-        .state('client.order', {
-            url: '/order',
-            templateUrl: 'templates/client/order.html',
-            controller: 'ClientOrderCtrl'
-        })
-        .state('client.view_delivery', {
-            cache: false,
-            url: '/view_delivery/:id',
-            templateUrl: 'templates/client/view_delivery.html',
-            controller: 'ClientViewDeliveryCtrl'
-        })
-        .state('client.checkout_item_detail', {
-            url: '/checkout/detail/:index',
-            templateUrl: 'templates/client/checkout_item_detail.html',
-            controller: 'ClientCheckoutDetailCtrl'
-        })
-        .state('client.view_products', {
-            url: '/view_products',
-            templateUrl: 'templates/client/view_products.html',
-            controller: 'ClientViewProductCtrl'
-        })
-        .state('client.checkout_successful', {
-            cache: false,
-            url: '/checkout/successful',
-            templateUrl: 'templates/client/checkout_successful.html',
-            controller: 'ClientCheckoutSuccessfulCtrl'
-        })
-        .state('deliveryman', {
-            abstract: true,
-            cache: false,
-            url: '/deliveryman',
-            templateUrl: 'templates/deliveryman/menu.html',
-            controller: 'DeliverymanMenuCtrl',
-            data: {
-                permissions: {
-                    only: ['deliveryman-role']
-                }
-            }
-        })
-        .state('deliveryman.order', {
-            url: '/order',
-            templateUrl: 'templates/deliveryman/order.html',
-            controller: 'DeliverymanOrderCtrl'
-        })
-        .state('deliveryman.view_order', {
-            cache: false,
-            url: '/view_order/:id',
-            templateUrl: 'templates/deliveryman/view_order.html',
-            controller: 'DeliverymanViewOrderCtrl'
+        OAuthProvider.configure({
+            baseUrl: appConfig.baseUrl,
+            clientId: 'app',
+            clientSecret: 'secret',
+            grantPath: '/oauth/access_token' // optional
         });
-    $urlRouterProvider.otherwise('/login');
 
-    $provide.decorator('OAuthToken', ['$localStorage', '$delegate', function ($localStorage, $delegate) {
-        Object.defineProperties($delegate, {
-            setToken: {
-                value: function (data) {
-                    return $localStorage.setObject('token', data);
-                },
-                enumerable: true,
-                configurable: true,
-                writable: true
-            },
-            getToken: {
-                value: function () {
-                    return $localStorage.getObject('token');
-                },
-                enumerable: true,
-                configurable: true,
-                writable: true
-            },
-            removeToken: {
-                value: function () {
-                    $localStorage.setObject('token', null);
-                },
-                enumerable: true,
-                configurable: true,
-                writable: true
+        OAuthTokenProvider.configure({
+            name: 'token',
+            options: {
+                secure: false
             }
         });
-        return $delegate;
-    }]);
+
+        $stateProvider
+            .state('login', {
+                cache: false,
+                url: '/login',
+                templateUrl: 'templates/login.html',
+                controller: 'LoginCtrl'
+            })
+            .state('logout', {
+                url: '/logout',
+                controller: 'LogoutCtrl'
+            })
+            .state('client', {
+                abstract: true,
+                cache: false,
+                url: '/client',
+                templateUrl: 'templates/client/menu.html',
+                controller: 'ClientMenuCtrl',
+                data: {
+                    permissions: {
+                        only: ['client-role']
+                    }
+                }
+            })
+            .state('client.checkout', {
+                cache: false,
+                url: '/checkout',
+                templateUrl: 'templates/client/checkout.html',
+                controller: 'ClientCheckoutCtrl'
+            })
+            .state('client.view_order', {
+                url: '/view_order/:id',
+                templateUrl: 'templates/client/view_order.html',
+                controller: 'ClientViewOrderCtrl'
+            })
+            .state('client.order', {
+                url: '/order',
+                templateUrl: 'templates/client/order.html',
+                controller: 'ClientOrderCtrl'
+            })
+            .state('client.view_delivery', {
+                cache: false,
+                url: '/view_delivery/:id',
+                templateUrl: 'templates/client/view_delivery.html',
+                controller: 'ClientViewDeliveryCtrl'
+            })
+            .state('client.checkout_item_detail', {
+                url: '/checkout/detail/:index',
+                templateUrl: 'templates/client/checkout_item_detail.html',
+                controller: 'ClientCheckoutDetailCtrl'
+            })
+            .state('client.view_products', {
+                url: '/view_products',
+                templateUrl: 'templates/client/view_products.html',
+                controller: 'ClientViewProductCtrl'
+            })
+            .state('client.checkout_successful', {
+                cache: false,
+                url: '/checkout/successful',
+                templateUrl: 'templates/client/checkout_successful.html',
+                controller: 'ClientCheckoutSuccessfulCtrl'
+            })
+            .state('deliveryman', {
+                abstract: true,
+                cache: false,
+                url: '/deliveryman',
+                templateUrl: 'templates/deliveryman/menu.html',
+                controller: 'DeliverymanMenuCtrl',
+                data: {
+                    permissions: {
+                        only: ['deliveryman-role']
+                    }
+                }
+            })
+            .state('deliveryman.order', {
+                url: '/order',
+                templateUrl: 'templates/deliveryman/order.html',
+                controller: 'DeliverymanOrderCtrl'
+            })
+            .state('deliveryman.view_order', {
+                cache: false,
+                url: '/view_order/:id',
+                templateUrl: 'templates/deliveryman/view_order.html',
+                controller: 'DeliverymanViewOrderCtrl'
+            });
+        $urlRouterProvider.otherwise('/login');
+
+        $provide.decorator('OAuthToken', ['$localStorage', '$delegate', function ($localStorage, $delegate) {
+            Object.defineProperties($delegate, {
+                setToken: {
+                    value: function (data) {
+                        return $localStorage.setObject('token', data);
+                    },
+                    enumerable: true,
+                    configurable: true,
+                    writable: true
+                },
+                getToken: {
+                    value: function () {
+                        return $localStorage.getObject('token');
+                    },
+                    enumerable: true,
+                    configurable: true,
+                    writable: true
+                },
+                removeToken: {
+                    value: function () {
+                        $localStorage.setObject('token', null);
+                    },
+                    enumerable: true,
+                    configurable: true,
+                    writable: true
+                }
+            });
+            return $delegate;
+        }]);
 
 
-    $provide.decorator('oauthInterceptor', ['$delegate', function ($delegate) {
-        delete $delegate['responseError'];
-        return $delegate;
-    }]);
-})
+        $provide.decorator('oauthInterceptor', ['$delegate', function ($delegate) {
+            delete $delegate['responseError'];
+            return $delegate;
+        }]);
+    })
 
-.service('cart', function () {
-    this.items = [];
+    .service('cart', function () {
+        this.items = [];
 
-});
+    });

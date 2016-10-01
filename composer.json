@@ -15,7 +15,8 @@
         "league/fractal": "dev-master",
         "barryvdh/laravel-cors": "^0.8.2",
         "pusher/pusher-php-server": "~2.0",
-        "barryvdh/laravel-debugbar": "^2.3"
+        "barryvdh/laravel-debugbar": "^2.3",
+        "pagseguro/php": "2.7.1"
 
     },
     "require-dev": {

@@ -22,12 +22,19 @@
                         <i class="ion ion-cash"> {{item.price}}</i>
                     </div>
                     <div class="col text-right">
-                        <i class="ion ion-social-usd"> {{item.qtd * item.price}}</i>
+                        <i class="ion ion-social-usd" ng-model="total"> {{item.qtd * item.price}}</i>
                     </div>
                 </div>
                 <ion-delete-button class="ion ion-minus-circled" ng-click="removeItem($index)"></ion-delete-button>
             </ion-item>
         </ion-list>
+        <ion-item ng-repeat="payments in paymentMethods">
+            <div class="row">
+                <div class="col">
+                    Bandeira: {{payments}}
+                </div>
+            </div>
+        </ion-item>
         <button type="button" class="button button-balanced button-full" ng-click="readBarCode()" ng-disabled="cupom.value != null">
             Adicionar Cupom
         </button> <button type="button" class="button button-assertive button-full" ng-click="save()">

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a9d74e173325d7f5021cc97925cd91c1",
-    "content-hash": "ede8b38e0b38e7d79ed0d41e6a372e4b",
+    "hash": "28f4400089de7b66f0ce86d15f4e3a6d",
+    "content-hash": "17825448eae763b0d0f1f7afafe882fa",
     "packages": [
         {
             "name": "barryvdh/laravel-cors",
@@ -1303,6 +1303,40 @@
                 "php"
             ],
             "time": "2016-09-16 12:04:44"
+        },
+        {
+            "name": "pagseguro/php",
+            "version": "2.7.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pagseguro/php.git",
+                "reference": "1c956e609acdef2dd7a37ece5cb5d13e7fc672a0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pagseguro/php/zipball/1c956e609acdef2dd7a37ece5cb5d13e7fc672a0",
+                "reference": "1c956e609acdef2dd7a37ece5cb5d13e7fc672a0",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "lib-curl": "*",
+                "lib-libxml": "*",
+                "lib-openssl": "*",
+                "php": ">=5.4.27"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "source/PagSeguroLibrary"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache License 2.0"
+            ],
+            "description": "Biblioteca de integração com o PagSeguro",
+            "time": "2016-01-28 20:17:46"
         },
         {
             "name": "paragonie/random_compat",

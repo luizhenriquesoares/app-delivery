@@ -103,6 +103,9 @@ Route::group(['middleware' => 'cors'], function (){
                 ['except' => ['create', 'edit', 'destroy']]);
 
             Route::get('products', 'ClientProductController@index');
+
+            Route::get('session', 'PagSeguroController@getSessionId');
+
         });
 
         Route::group(['namespace' => 'Api\Deliveryman', 'prefix' => 'deliveryman',

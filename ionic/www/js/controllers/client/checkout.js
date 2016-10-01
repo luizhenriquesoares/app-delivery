@@ -1,27 +1,33 @@
 'use strict';
 
 angular.module('starter.controllers')
+
     .controller('ClientCheckoutCtrl', ['$ionicLoading',
         'ClientOrder', '$scope', '$state', '$cart', '$ionicPopup', 'Cupom', '$cordovaBarcodeScanner', 'User',
         function ($ionicLoading, ClientOrder, $scope, $state, $cart, $ionicPopup, Cupom, $cordovaBarcodeScanner, User) {
             User.authenticated({
                 include: 'client'
             }, function (data) {
-                console.log(data.data);
+
             }, function (responseError) {
 
             });
+
             var cart = $cart.get();
+            var paymentMethods = [];
+            $scope.total = [];
             $scope.cupom = cart.cupom;
             $scope.items = cart.items;
             $scope.total = $cart.getTotalFinal();
+
             $scope.removeItem = function (i) {
 
                 $cart.removeItem(i);
                 $scope.items.splice(i, 1);
                 $scope.total = $cart.getTotalFinal();
             };
-
+            var amount = $scope.total;
+            getMethodsPayment(amount);
             $scope.openProductDetail = function (i) {
 
                 $state.go('client.checkout_item_detail', {
@@ -37,18 +43,20 @@ angular.module('starter.controllers')
                 var obj = {
                     items: angular.copy($scope.items)
                 };
+
                 angular.forEach(obj.items, function (item) {
                     item.product_id = item.id;
                 });
+
                 $ionicLoading.show({
                     template: 'Carregando...'
                 });
                 if ($scope.cupom.value) {
                     obj.cupom_code = $scope.cupom.code;
                 }
-                ClientOrder.save({
-                    id: null
-                }, obj, function (data) {
+
+                ClientOrder.save({id: null}, obj, function (data) {
+
                     $ionicLoading.hide();
                     $state.go('client.checkout_successful');
                 }, function (responseError) {
@@ -59,6 +67,8 @@ angular.module('starter.controllers')
                     })
                 });
             };
+
+
 
             // leitura do codigo de barra
             $scope.readBarCode = function () {
@@ -99,7 +109,21 @@ angular.module('starter.controllers')
                     })
 
                 });
-            };
+            }
 
+            function getMethodsPayment(amount) {
+                PagSeguroDirectPayment.getPaymentMethods({
+                    amount: amount,
+                    success: function (response) {
+                        paymentMethods = response.paymentMethods;
+                        Object.keys(paymentMethods).forEach(function (data) {
+                            $scope.paymentMethods = paymentMethods[data].name;
+
+                            console.log($scope.paymentMethods);
+
+                        });
+                    }
+                });
+            }
         }
     ]);
